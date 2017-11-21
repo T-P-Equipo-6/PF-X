@@ -12,7 +12,10 @@ class TwitterManager():
                                  access_token_key=TwitterAuth.keys['access_token_key'],
                                  access_token_secret=TwitterAuth.keys['access_token_secret'])
 
-        self.__message_id = self.__get_message()['id']
+        try:
+            self.__message_id = self.__get_message()['id']
+        except twitter.error.TwitterError:
+            self.__message_id = None
 
         self.alarm_status = False
 
@@ -28,14 +31,16 @@ class TwitterManager():
     def send_message(self, user_id, message):
         self.__api.PostDirectMessage(text=message, user_id=user_id)
 
-    def set_temperature(self, temperature_value):
-        self.__temperature = temperature_value
-
-    def set_light_status(self, room, status):
-        place = self.rooms[room]
-        place = status
-
     def run(self):
+
+        if not self.__message_id:
+            try:
+                self.__message_id = self.__get_message()['id']
+            except twitter.error.TwitterError:
+                self.__message_id = None
+                print('Twitter temporarily unavailable')
+                return
+
         data = self.__get_message()
 
         if self.__message_id != data['id'] and data['sender']['screen_name'] in Users.auth_users:
@@ -87,6 +92,7 @@ class TwitterManager():
 
                 if room in self.__lights.rooms:
                     if action == 'TURN LIGHTS ON':
+                        self.__lights.set_lights(room, True)
                         message = self.__lights.set_lights(room, True)
                         self.send_message(data['sender']['id'], message)
 

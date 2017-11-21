@@ -1,5 +1,6 @@
 class LightsManager:
-    def __init__(self):
+    def __init__(self, house_handler=None):
+        self.__house = house_handler
         self.__bedroom_light = False
         self.__studio_light = False
         self.__kitchen_light = False
@@ -13,19 +14,23 @@ class LightsManager:
         }
 
         self.status = {
-            'True': ' LIGHTS ARE ON',
-            'False': ' LIGHTS ARE OFF'
+            'True': 'ON',
+            'False': 'OFF'
         }
+
+        self.phrase = ' LIGHTS ARE '
 
     def set_lights(self, room, status):
         self.rooms[room] = status
-        return room + self.status[str(status)]
+        condition = self.status[str(status)]
+        self.__house('LIGHTS', room, condition)
+        return room + self.phrase + condition
 
     def room_status(self, room):
-        return room + self.status[str(self.rooms[room])]
+        return room + self.phrase + self.status[str(self.rooms[room])]
 
     def rooms_status(self):
         message = ''
         for room in self.rooms:
-            message = message + '\n' + room + self.status[str(self.rooms[room])]
+            message = message + '\n' + room + self.phrase + self.status[str(self.rooms[room])]
         return message
