@@ -1,4 +1,6 @@
 from Views.MainView import MainView
+
+
 class MainApp():
     def __init__(self):
         self.__master = MainView()

@@ -1,7 +1,7 @@
 from tkinter import Tk, N, S, E, W, Label, PhotoImage
 from Views.InterLabel import InterLabel
 from Views.InterfaceView import InterfaceView
-from Views.InterButton import InterButton
+from Views.InterButton import InterButton, AssetsNames
 
 class MainView(Tk):
     class Constants:
@@ -9,6 +9,7 @@ class MainView(Tk):
         height = 700
         width = 600
         normal_color = '#F5F5F5'
+        center = W + E + N + S
 
         @classmethod
         def size(cls):
@@ -36,5 +37,8 @@ class MainView(Tk):
     def __configure_UI(self, tap_operator_handler = None):
         self.__interface = InterfaceView(self, tap_operator_handler=tap_operator_handler)
 
+        self.__title_image = PhotoImage(file=AssetsNames.title_file)
+        self.__title_label = Label(image=self.__title_image)
+        self.__title_label.grid(row=0, column=0, columnspan=self.Constants.width, sticky=self.Constants.center)
 
 

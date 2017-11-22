@@ -6,7 +6,6 @@ class InterButton(Label):
     class Constants:
         width = 100
         center = W + E + N + S
-        normal_color = '#F5F5F5'
         event = "<Button-1>"
 
     def __init__(self, master, tap_toggle_handler = None):
