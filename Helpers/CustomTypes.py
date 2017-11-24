@@ -8,5 +8,3 @@ class AssetsNames:
     title_file = "Assets/house.ppm"
     off_file = "Assets/off.ppm"
     on_file = "Assets/on.ppm"
-
-

@@ -9,12 +9,12 @@ from serial import Serial
 
 class MainApp():
     def __init__(self):
-        self.__master = MainView()
-        self.__master.protocol("WM_DELETE_WINDOW")
         self.__arduino = Serial('/dev/tty.usbmodem1441', 115200)
         self.__data = DataManager(alarm_handler=self.alarm_handler, temperature_handler=self.temperature_handler)
         self.__lights = LightsManager(house_handler=self.house_handler)
         self.__twitter = TwitterManager(lights_manager=self.__lights)
+        self.__master = MainView(rooms=self.__lights.rooms)
+        self.__master.protocol("WM_DELETE_WINDOW")
 
 
     def run(self):

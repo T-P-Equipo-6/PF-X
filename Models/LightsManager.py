@@ -27,7 +27,7 @@ class LightsManager:
         return room + self.phrase + condition
 
     def room_status(self, room):
-        return room + self.phrase + self.status[str(self.rooms[room])]
+        return room + self.phrase + self.status[str(rooms[room])]
 
     def rooms_status(self):
         message = ''
