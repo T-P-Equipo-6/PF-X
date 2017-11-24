@@ -81,8 +81,7 @@ class TwitterManager():
                 self.send_message(data['sender']['id'], str(self.temperature) + 'º C')
 
             elif text == 'LIGHTS':
-                message = str(self.__lights.rooms_status())
-                self.send_message(data['sender']['id'], message)
+                self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', action='ROOMS_STATUS')
 
             elif ',' in text:
                 try:
@@ -94,16 +93,16 @@ class TwitterManager():
 
                 if room in self.__rooms:
                     if action == 'TURN LIGHTS ON':
-                        print('aqui')
-                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room, action='SET', status=True)
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                                      action='SET', status=True)
 
                     elif action == 'TURN LIGHTS OFF':
-                        message = self.__lights.set_lights(room, False)
-                        self.send_message(data['sender']['id'], message)
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                                      action='SET', status=False)
 
                     elif action == 'LIGHTS STATUS':
-                        message = self.__lights.room_status(room)
-                        self.send_message(data['sender']['id'], message)
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                                      action='ROOM_STATUS')
 
                     else:
                         self.send_message(data['sender']['id'], action + ' was not recognized')
@@ -114,5 +113,4 @@ class TwitterManager():
             else:
                 self.send_message(data['sender']['id'], 'Command was not recognized.')
 
-            print(text)
             self.__message_id = data['id']

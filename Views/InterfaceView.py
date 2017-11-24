@@ -13,6 +13,6 @@ class InterfaceView:
         counter = 0
 
         for room in rooms:
-            InterElement(master, counter, tap_operator_handler=tap_operator_handler, text=room)
+            InterElement(master, counter, tap_operator_handler=tap_operator_handler, text=room, status=rooms[room])
             counter += 1
 

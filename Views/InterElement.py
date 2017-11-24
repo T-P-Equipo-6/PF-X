@@ -4,8 +4,8 @@ from Views.InterButton import InterButton
 
 class InterElement:
 
-    def __init__(self, master, index_row, tap_operator_handler=None, text=None):
+    def __init__(self, master, index_row, tap_operator_handler=None, text=None, status=False):
         label = InterLabel(text=(text + ' LIGHTS'))
         label.position(index_row + 1, 0)
-        button = InterButton(master, tap_operator_handler, text)
+        button = InterButton(master, tap_operator_handler, text, status)
         button.position(index_row + 1, 1)

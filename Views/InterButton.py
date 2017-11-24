@@ -8,14 +8,15 @@ class InterButton(Label):
         center = W + E + N + S
         event = "<Button-1>"
 
-    def __init__(self, master, tap_toggle_handler=None, place=None):
+    def __init__(self, master, tap_toggle_handler=None, place=None, status=False):
         super().__init__(master)
         self.__tap_handler = tap_toggle_handler
-        self.__state = False
+        self.__state = status
         self.__place = place
         self.__on_image = PhotoImage(file=AssetsNames.on_file)
         self.__off_image = PhotoImage(file =AssetsNames.off_file)
-        self.__set_image(self.__off_image)
+        image = self.__on_image if self.__state else self.__off_image
+        self.__set_image(image)
         self.bind(self.Constants.event, self.__toggle)
 
     def __toggle(self, event):

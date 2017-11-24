@@ -16,12 +16,15 @@ class MainApp():
 
         self.__lights = LightsManager()
         self.__twitter = TwitterManager(event_handler=self.event_handler, rooms=self.__lights.rooms)
-        self.__events = EventsManager(lights_handler=self.__lights,
-                                      serial_handler=self.house_handler,
-                                      twitter_handler=self.__twitter)
-
         self.__master = MainView(rooms=self.__lights.rooms, tap_operator_handler=self.event_handler)
         self.__master.protocol("WM_DELETE_WINDOW")
+
+        self.__events = EventsManager(lights_handler=self.__lights,
+                                      serial_handler=self.house_handler,
+                                      twitter_handler=self.__twitter,
+                                      buttons_update=self.__master.update_lights_buttons)
+
+
 
     def run(self):
         self.__update_data()

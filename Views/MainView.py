@@ -37,7 +37,6 @@ class MainView(Tk):
         self.grid_columnconfigure(1, minsize=InterButton.Constants.width, weight=True)
 
     def __configure_ui(self):
-
         self.__interface = InterfaceView(self, self.__rooms, tap_operator_handler=self.__tap_operator_handler)
 
         self.__title_image = PhotoImage(file=AssetsNames.title_file)
