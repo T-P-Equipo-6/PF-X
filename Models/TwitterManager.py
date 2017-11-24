@@ -6,7 +6,7 @@ from Models.TwitterAuth import TwitterAuth
 
 
 class TwitterManager():
-    def __init__(self, lights_manager=None):
+    def __init__(self, event_handler=None, rooms=None):
         self.__api = twitter.Api(consumer_key=TwitterAuth.keys['consumer_key'],
                                  consumer_secret=TwitterAuth.keys['consumer_secret'],
                                  access_token_key=TwitterAuth.keys['access_token_key'],
@@ -23,7 +23,9 @@ class TwitterManager():
 
         self.__temperature = None
 
-        self.__lights = lights_manager
+        self.__events = event_handler
+
+        self.__rooms = rooms
 
     def __get_message(self):
         return json.loads(str(self.__api.GetDirectMessages()[0]))
@@ -90,11 +92,10 @@ class TwitterManager():
                     room = 'Nothing'
                     action = None
 
-                if room in self.__lights.rooms:
+                if room in self.__rooms:
                     if action == 'TURN LIGHTS ON':
-                        self.__lights.set_lights(room, True)
-                        message = self.__lights.set_lights(room, True)
-                        self.send_message(data['sender']['id'], message)
+                        print('aqui')
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room, action='SET', status=True)
 
                     elif action == 'TURN LIGHTS OFF':
                         message = self.__lights.set_lights(room, False)
@@ -108,7 +109,7 @@ class TwitterManager():
                         self.send_message(data['sender']['id'], action + ' was not recognized')
 
                 else:
-                    self.send_message(data['sender']['id', room + ' was not recognized'])
+                    self.send_message(data['sender']['id'], room + ' was not recognized')
 
             else:
                 self.send_message(data['sender']['id'], 'Command was not recognized.')
