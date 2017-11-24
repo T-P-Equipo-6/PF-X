@@ -3,6 +3,7 @@ from Views.InterLabel import InterLabel
 from Views.InterfaceView import InterfaceView
 from Views.InterButton import InterButton, AssetsNames
 
+
 class MainView(Tk):
     class Constants:
         title = "Main Interface"
@@ -15,14 +16,16 @@ class MainView(Tk):
         def size(cls):
             return '{}x{}'.format(cls.width, cls.height)
 
-    def __init__(self):
+    def __init__(self, rooms=None, tap_operator_handler=None):
         super().__init__()
         self.title(self.Constants.title)
         self.geometry(self.Constants.size())
         self.minsize(width=self.Constants.width, height=self.Constants.height)
         self.configure(bg=self.Constants.normal_color)
+        self.__rooms = rooms
         self.__configure_grid()
-        self.__configure_UI()
+        self.__tap_operator_handler = tap_operator_handler
+        self.__configure_ui()
 
     def __configure_grid(self):
         self.grid_rowconfigure(0, minsize=InterfaceView.Constants.row_height)
@@ -33,12 +36,14 @@ class MainView(Tk):
         self.grid_columnconfigure(0, minsize=InterLabel.Constants.width, weight=True)
         self.grid_columnconfigure(1, minsize=InterButton.Constants.width, weight=True)
 
-
-    def __configure_UI(self, tap_operator_handler = None):
-        self.__interface = InterfaceView(self, tap_operator_handler=tap_operator_handler)
+    def __configure_ui(self):
+        self.__interface = InterfaceView(self, self.__rooms, tap_operator_handler=self.__tap_operator_handler)
 
         self.__title_image = PhotoImage(file=AssetsNames.title_file)
         self.__title_label = Label(image=self.__title_image)
         self.__title_label.grid(row=0, column=0, columnspan=self.Constants.width, sticky=self.Constants.center)
+
+    def update_lights_buttons(self):
+        self.__configure_ui()
 
 

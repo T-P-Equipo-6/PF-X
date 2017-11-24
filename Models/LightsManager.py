@@ -1,6 +1,5 @@
 class LightsManager:
-    def __init__(self, house_handler=None):
-        self.__house = house_handler
+    def __init__(self):
         self.__bedroom_light = False
         self.__studio_light = False
         self.__kitchen_light = False
@@ -23,8 +22,9 @@ class LightsManager:
     def set_lights(self, room, status):
         self.rooms[room] = status
         condition = self.status[str(status)]
-        self.__house('LIGHTS', room, condition)
-        return room + self.phrase + condition
+        serial = ('LIGHTS' + room + condition)
+        user = (room + self.phrase + condition)
+        return serial, user
 
     def room_status(self, room):
         return room + self.phrase + self.status[str(self.rooms[room])]
