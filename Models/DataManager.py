@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 
 
 class DataManager():
@@ -11,9 +12,13 @@ class DataManager():
         self.ultrasonic_2 = 0
         self.temperature = 0
 
-    def analise_data(self, raw_data):
+    def analyze_data(self, raw_data):
         clean_data = raw_data.strip(" \n\r")
-        data = json.loads(str(clean_data))
+        try:
+            data = json.loads(str(clean_data))
+        except JSONDecodeError:
+            print('bad data')
+            return
 
         try:
             self.ultrasonic_1 = data['UltrasonicSensorValue1']
