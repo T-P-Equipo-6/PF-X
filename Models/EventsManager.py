@@ -5,9 +5,12 @@ class EventsManager:
         self.__twitter = twitter_handler
         self.__buttons_update = buttons_update
 
-    def analyze_event(self,caller=None, user=None, object=None, place=None, action=None, status=None):
-        if object == 'LIGHTS':
+    def analyze_event(self,caller=None, user=None, event=None, place=None, action=None, status=None):
+        if event == 'LIGHTS':
             self.__lights_event(caller=caller, user=user, place=place, action=action, status=status)
+
+        if event == 'TEMPERATURE':
+            self.__temperature_event(caller=caller, user=user, place=place, action=action, status=status)
 
     def __lights_event(self, caller=None, user=None, place=None, action=None, status=None):
         response = ''
@@ -25,4 +28,12 @@ class EventsManager:
         if caller == 'TWITTER':
             self.__buttons_update()
             self.__twitter.send_message(user_id=user, message=response)
+
+    def __temperature_event(self, caller=None, user=None, place=None, action=None, status=None):
+
+        if status:
+            self.__serial('FANHOUSEON')
+
+        elif not status:
+            self.__serial('FANHOUSEOFF')
 

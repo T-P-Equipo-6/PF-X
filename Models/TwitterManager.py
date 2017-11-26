@@ -81,7 +81,7 @@ class TwitterManager():
                 self.send_message(data['sender']['id'], str(self.temperature) + 'º C')
 
             elif text == 'LIGHTS':
-                self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', action='ROOMS_STATUS')
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', action='ROOMS_STATUS')
 
             elif ',' in text:
                 try:
@@ -93,15 +93,15 @@ class TwitterManager():
 
                 if room in self.__rooms:
                     if action == 'TURN LIGHTS ON':
-                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', place=room,
                                       action='SET', status=True)
 
                     elif action == 'TURN LIGHTS OFF':
-                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', place=room,
                                       action='SET', status=False)
 
                     elif action == 'LIGHTS STATUS':
-                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', place=room,
                                       action='ROOM_STATUS')
 
                     else:
