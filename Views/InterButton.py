@@ -6,6 +6,8 @@ class InterButton(Label):
     class Constants:
         width = 100
         center = W + E + N + S
+        border_type = 'groove'
+        border_width = 1
         event = "<Button-1>"
 
     def __init__(self, master, tap_toggle_handler=None, place=None, status=False):
@@ -14,6 +16,9 @@ class InterButton(Label):
         self.__state = status
         self.__place = place
         self.__on_image = PhotoImage(file=AssetsNames.on_file)
+
+        self.configure(borderwidth=self.Constants.border_width, relief=self.Constants.border_type)
+
         self.__off_image = PhotoImage(file =AssetsNames.off_file)
         image = self.__on_image if self.__state else self.__off_image
         self.__set_image(image)
