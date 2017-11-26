@@ -24,7 +24,8 @@ class MainApp():
         self.__events = EventsManager(lights_handler=self.__lights,
                                       serial_handler=self.house_handler,
                                       twitter_handler=None,
-                                      buttons_update=self.__master.update_lights_buttons)
+                                      buttons_update=self.__master.update_lights_buttons,
+                                      temperature_handler=self.__temperature)
 
     def run(self):
         self.__update_data()
@@ -36,7 +37,7 @@ class MainApp():
         except UnicodeDecodeError:
             raw_data = 'Bad data'
         self.__data.analyze_data(raw_data)
-        #self.__twitter.run()
+        # self.__twitter.run()
         self.__master.after(1, self.__update_data)
 
     def alarm_handler(self, ultrasonic_value_1, ultrasonic_value_2):

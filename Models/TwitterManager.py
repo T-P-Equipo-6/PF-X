@@ -78,7 +78,7 @@ class TwitterManager():
                 self.send_message(data['sender']['id'], 'Door status: ' + str(self.door_status))
 
             elif text == 'TEMPERATURE':
-                self.send_message(data['sender']['id'], str(self.temperature) + 'º C')
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='TEMPERATURE', action='GET')
 
             elif text == 'LIGHTS':
                 self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', action='ROOMS_STATUS')
