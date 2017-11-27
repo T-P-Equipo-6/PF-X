@@ -9,7 +9,7 @@ class LightsManager:
             'BEDROOM': self.__bedroom_light,
             'STUDIO': self.__studio_light,
             'KITCHEN': self.__kitchen_light,
-            'LIVINGROOM': self.__livingroom_light
+            'BATHROOM': self.__livingroom_light
         }
 
         self.status = {

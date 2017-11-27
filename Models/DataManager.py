@@ -21,21 +21,16 @@ class DataManager():
             return
 
         try:
-            self.ultrasonic_1 = data['UltrasonicSensorValue1']
+            self.ultrasonic_1 = data['USV']
         except KeyError:
             self.ultrasonic_1 = None
 
         try:
-            self.ultrasonic_2 = data['UltrasonicSensorValue2']
-        except KeyError:
-            self.ultrasonic_2 = None
-
-        try:
-            self.temperature = data['TemperatureValue']
+            self.temperature = data['TEMP']
         except KeyError:
             self.temperature = None
 
-        self.alarm_handler(self.ultrasonic_1, self.ultrasonic_2)
+        self.alarm_handler(self.ultrasonic_1)
         self.temperature_handler(self.temperature)
 
 
