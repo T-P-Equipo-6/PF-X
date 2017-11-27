@@ -13,6 +13,10 @@ class EventsManager:
         if event == 'TEMPERATURE':
             self.__temperature_event(caller=caller, user=user, place=place, action=action, status=status)
 
+        if event == 'ALARM':
+            print('aqui')
+            self.__alarm_event(caller=caller, user=user, place=place, action=action, status=status)
+
     def __lights_event(self, caller=None, user=None, place=None, action=None, status=None):
         response = ''
 
@@ -44,6 +48,13 @@ class EventsManager:
 
             if caller == 'TWITTER':
                 self.__twitter.send_message(user_id=user, message=response)
+
+
+    def __alarm_event(self, caller=None, user=None, place=None, action=None, status=None):
+
+        if action == 'ACTIVATE':
+            self.__twitter.send_alarm_message(message='The alarm has been activated \n Taking security measures.')
+
 
 
 

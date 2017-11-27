@@ -19,13 +19,13 @@ class MainApp():
         self.__lights = LightsManager()
         self.__alarm = AlarmManager(event_handler=self.event_handler)
         self.__temperature = TemperatureManager(event_handler=self.event_handler)
-        # self.__twitter = TwitterManager(event_handler=self.event_handler, rooms=self.__lights.rooms)
+        self.__twitter = TwitterManager(event_handler=self.event_handler, rooms=self.__lights.rooms)
         self.__master = MainView(rooms=self.__lights.rooms, tap_operator_handler=self.event_handler)
         self.__master.protocol("WM_DELETE_WINDOW")
 
         self.__events = EventsManager(lights_handler=self.__lights,
                                       serial_handler=self.house_handler,
-                                      twitter_handler=None,
+                                      twitter_handler=self.__twitter,
                                       buttons_update=self.__master.update_lights_buttons,
                                       temperature_handler=self.__temperature)
 
@@ -39,7 +39,7 @@ class MainApp():
         except UnicodeDecodeError:
             raw_data = 'Bad data'
         self.__data.analyze_data(raw_data)
-        # self.__twitter.run()
+        self.__twitter.run()
         self.__master.after(1, self.__update_data)
 
     def alarm_handler(self, ultrasonic_value_1, ultrasonic_value_2):

@@ -5,7 +5,7 @@ from Models.AuthUsers import Users
 from Models.TwitterAuth import TwitterAuth
 
 
-class TwitterManager():
+class TwitterManager:
     def __init__(self, event_handler=None, rooms=None):
         self.__api = twitter.Api(consumer_key=TwitterAuth.keys['consumer_key'],
                                  consumer_secret=TwitterAuth.keys['consumer_secret'],
@@ -32,6 +32,10 @@ class TwitterManager():
 
     def send_message(self, user_id, message):
         self.__api.PostDirectMessage(text=message, user_id=user_id)
+
+    def send_alarm_message(self, message):
+        for user in Users.auth_users:
+            self.__api.PostDirectMessage(text=message, user_id=Users.auth_users[user]['user_id'])
 
     def run(self):
 

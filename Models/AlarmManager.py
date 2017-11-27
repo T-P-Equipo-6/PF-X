@@ -44,13 +44,12 @@ class AlarmManager():
 
             if self.__actual_sensor1 != self.__sensor1 and not self.__alarm_status:
                 self.__alarm_status = True
+                print('holi')
                 self.__event(event='ALARM', place='HOUSE', action='ACTIVATE', status=True)
-                print('kuibas', self.__actual_sensor1)
 
             if self.__actual_sensor2 != self.__sensor2 and not self.__alarm_status:
                 self.__alarm_status = True
                 self.__event(event='ALARM', place='HOUSE', action='ACTIVATE', status=True)
-                print('kiubas X2')
 
     def __turn_to_distance(self, data):
         try:
