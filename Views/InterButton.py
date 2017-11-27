@@ -30,7 +30,7 @@ class InterButton(Label):
         self.__set_image(image)
 
         if self.__tap_handler is None: return
-        self.__tap_handler(object='LIGHTS', place=self.__place, action='SET', status=self.__state)
+        self.__tap_handler(event='LIGHTS', place=self.__place, action='SET', status=self.__state)
 
     def __set_image(self, image):
         self.configure(image=image)

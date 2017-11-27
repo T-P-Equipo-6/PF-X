@@ -5,7 +5,7 @@ from Models.AuthUsers import Users
 from Models.TwitterAuth import TwitterAuth
 
 
-class TwitterManager():
+class TwitterManager:
     def __init__(self, event_handler=None, rooms=None):
         self.__api = twitter.Api(consumer_key=TwitterAuth.keys['consumer_key'],
                                  consumer_secret=TwitterAuth.keys['consumer_secret'],
@@ -32,6 +32,10 @@ class TwitterManager():
 
     def send_message(self, user_id, message):
         self.__api.PostDirectMessage(text=message, user_id=user_id)
+
+    def send_alarm_message(self, message):
+        for user in Users.auth_users:
+            self.__api.PostDirectMessage(text=message, user_id=Users.auth_users[user]['user_id'])
 
     def run(self):
 
@@ -78,10 +82,10 @@ class TwitterManager():
                 self.send_message(data['sender']['id'], 'Door status: ' + str(self.door_status))
 
             elif text == 'TEMPERATURE':
-                self.send_message(data['sender']['id'], str(self.temperature) + 'º C')
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='TEMPERATURE', action='GET')
 
             elif text == 'LIGHTS':
-                self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', action='ROOMS_STATUS')
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', action='ROOMS_STATUS')
 
             elif ',' in text:
                 try:
@@ -93,15 +97,15 @@ class TwitterManager():
 
                 if room in self.__rooms:
                     if action == 'TURN LIGHTS ON':
-                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', place=room,
                                       action='SET', status=True)
 
                     elif action == 'TURN LIGHTS OFF':
-                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', place=room,
                                       action='SET', status=False)
 
                     elif action == 'LIGHTS STATUS':
-                        self.__events(caller='TWITTER', user=(data['sender']['id']), object='LIGHTS', place=room,
+                        self.__events(caller='TWITTER', user=(data['sender']['id']), event='LIGHTS', place=room,
                                       action='ROOM_STATUS')
 
                     else:
