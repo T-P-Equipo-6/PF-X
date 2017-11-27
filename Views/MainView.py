@@ -53,4 +53,7 @@ class MainView(Tk):
     def update_lights_buttons(self):
         self.__configure_ui()
 
+    def update_temperature_value(self, text):
+        self.__interface.update_temperature(text)
+
 

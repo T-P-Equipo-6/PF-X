@@ -6,7 +6,7 @@ class InterLabel(Label):
         border_type = 'groove'
         border_width = 1
         center = W + E + N + S
-        font = ("Phosphate", 12, "bold")
+        font = ("Phosphate", 20)
         normal_color = 'white'#'#F5F5F5'
 
     def __init__(self, text=None):
@@ -18,3 +18,6 @@ class InterLabel(Label):
 
     def position(self, row, column):
         self.grid(row = row, column = column, sticky = self.Constants.center)
+
+    def set_text(self, text):
+        self.configure(text=text)
