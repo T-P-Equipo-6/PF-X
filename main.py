@@ -1,6 +1,6 @@
 from Views.MainView import MainView
 from Models.DataManager import DataManager
-from Models.TwitterManager import TwitterManager
+#from Models.TwitterManager import TwitterManager
 from Models.LightsManager import LightsManager
 from Models.TemperatureManager import TemperatureManager
 from Models.EventsManager import EventsManager
@@ -12,7 +12,7 @@ from serial import Serial
 
 class MainApp():
     def __init__(self):
-        self.__arduino = Serial('/dev/tty.usbmodem1441', 115200)
+        #self.__arduino = Serial('/dev/tty.usbmodem1441', 115200)
 
         self.__data = DataManager(alarm_handler=self.alarm_handler, temperature_handler=self.temperature_handler)
 
@@ -50,7 +50,7 @@ class MainApp():
 
     def house_handler(self, value):
         value = value.encode('ascii')
-        self.__arduino.write(value)
+        #self.__arduino.write(value)
         time.sleep(2)
 
     def event_handler(self, caller=None, user=None, event=None, place=None, action=None, status=None):

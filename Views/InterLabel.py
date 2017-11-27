@@ -2,12 +2,12 @@ from tkinter import W, E, N, S, Label
 
 class InterLabel(Label):
     class Constants:
-        width = 500
+        width = 200
         border_type = 'groove'
         border_width = 1
         center = W + E + N + S
         font = ("Phosphate", 12, "bold")
-        normal_color = '#F5F5F5'
+        normal_color = 'white'#'#F5F5F5'
 
     def __init__(self, text=None):
         super().__init__()
