@@ -1,5 +1,5 @@
 class TemperatureManager:
-    def __init__(self, event_handler=None):
+    def __init__(self, event_handler=None, update_handler=None):
         self.temperature = None
         self.__temperature_values = []
         self.__counter = 0
@@ -7,6 +7,7 @@ class TemperatureManager:
         self.__max_temperature = 40
         self.__fan_status = False
         self.__event = event_handler
+        self.__update = update_handler
 
     def analyze_temperature(self, value):
         try:
@@ -23,6 +24,7 @@ class TemperatureManager:
         if self.__counter == self.__top_values:
             self.__counter = 0
             self.temperature = (sum(self.__temperature_values))/self.__top_values
+            self.__update(self.temperature)
             self.__temperature_values = []
 
         if self.temperature:
@@ -35,6 +37,8 @@ class TemperatureManager:
                 self.__fan_status = False
                 self.__event(caller=None, user=None, event='TEMPERATURE', place='HOUSE', action='FAN', status=self.__fan_status)
                 print('Turning off the fan')
+
+        return self.temperature
 
     def to_celsius(self, raw_data):
         milivolts = (raw_data/1023)*5000

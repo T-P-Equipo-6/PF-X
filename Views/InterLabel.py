@@ -18,3 +18,6 @@ class InterLabel(Label):
 
     def position(self, row, column):
         self.grid(row = row, column = column, sticky = self.Constants.center)
+
+    def set_text(self, text):
+        self.configure(text=text)

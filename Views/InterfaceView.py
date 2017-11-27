@@ -31,8 +31,13 @@ class InterfaceView:
 
         temperature_label = InterLabel('TEMPERATURE')
         temperature_label.position(3, 2)
-        temperature_value_label = InterLabel(text='23')
-        temperature_value_label.position(3, 3)
+        self.temperature_value_label = InterLabel(text='23')
+        self.temperature_value_label.position(3, 3)
+
+    def update_temperature(self, text):
+        self.temperature_value_label.set_text(text)
+
+
 
 
 

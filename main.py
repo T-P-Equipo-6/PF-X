@@ -17,7 +17,7 @@ class MainApp():
 
         self.__lights = LightsManager()
         self.__alarm = AlarmManager(event_handler=self.event_handler)
-        self.__temperature = TemperatureManager(event_handler=self.event_handler)
+        self.__temperature = TemperatureManager(event_handler=self.event_handler, update_handler=self.update_temperature)
         #self.__twitter = TwitterManager(event_handler=self.event_handler, rooms=self.__lights.rooms)
         self.__master = MainView(rooms=self.__lights.rooms, tap_operator_handler=self.event_handler)
         self.__master.protocol("WM_DELETE_WINDOW")
@@ -53,6 +53,16 @@ class MainApp():
 
     def event_handler(self, caller=None, user=None, event=None, place=None, action=None, status=None):
         self.__events.analyze_event(caller=caller, user=user, event=event, place=place, action=action, status=status)
+
+    def update_temperature(self, value):
+        if value is None:
+            return
+        try:
+            value = int(value)
+        except ValueError:
+            value = 'GETTING DATA'
+
+        self.__master.update_temperature_value(value)
 
 
 if __name__ == '__main__':
