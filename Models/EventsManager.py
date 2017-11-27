@@ -14,7 +14,6 @@ class EventsManager:
             self.__temperature_event(caller=caller, user=user, place=place, action=action, status=status)
 
         if event == 'ALARM':
-            print('aqui')
             self.__alarm_event(caller=caller, user=user, place=place, action=action, status=status)
 
     def __lights_event(self, caller=None, user=None, place=None, action=None, status=None):
