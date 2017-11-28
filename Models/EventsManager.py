@@ -1,3 +1,6 @@
+from twitter import error
+
+
 class EventsManager:
     def __init__(self, lights_handler=None, serial_handler=None, twitter_handler=None, buttons_update=None,
                  temperature_handler=None, voice_handler=None, alarm_handler=None, alarm_button_update=None):
@@ -66,8 +69,13 @@ class EventsManager:
             if status:
                 self.__serial('ALARMON')
                 self.__alarm.set_alarm(True)
-                #self.__twitter.send_alarm_message(message='The alarm has been activated \n Taking security measures.')
                 self.__voice.say('The alarm has been activated, taking security measures.')
+
+                try:
+                    self.__twitter.send_alarm_message(
+                        message='The alarm has been activated \n Taking security measures.')
+                except error.TwitterError:
+                    self.__voice.say('Unable to send Twitter message')
 
                 if caller == 'TWITTER':
                     self.__alarm_update(True)

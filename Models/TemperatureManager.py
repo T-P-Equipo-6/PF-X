@@ -46,5 +46,8 @@ class TemperatureManager:
         return celsius
 
     def get_temperature(self):
-        message = 'THE TEMPERATURE IS ' + str(int(self.temperature)) + ' DEGREES CELSIUS'
+        try:
+            message = 'THE TEMPERATURE IS ' + str(int(self.temperature)) + ' DEGREES CELSIUS'
+        except TypeError:
+            message = 'NO TEMPERATURE DATA'
         return message
