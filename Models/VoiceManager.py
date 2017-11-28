@@ -1,3 +1,4 @@
+from Models.VoiceAuth import VoiceAuth
 import speech_recognition as sr
 import pyttsx3
 
@@ -9,7 +10,7 @@ class VoiceCommands:
         self.engine.setProperty('voice', 'com.apple.speech.synthesis.voice.samantha')
         self.r = sr.Recognizer()
 
-        self.key = "xxxxxxxxxxx"
+        self.key = VoiceAuth.key
 
         self.__events = event_handler
         self.__rooms = rooms

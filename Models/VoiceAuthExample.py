@@ -1,0 +1,2 @@
+class VoiceAuth():
+    key = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
