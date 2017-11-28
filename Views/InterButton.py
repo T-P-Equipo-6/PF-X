@@ -10,10 +10,11 @@ class InterButton(Label):
         border_width = 1
         event = "<Button-1>"
 
-    def __init__(self, master, tap_toggle_handler=None, place=None, status=False):
+    def __init__(self, master, tap_toggle_handler=None, place=None, event=None, status=False):
         super().__init__(master)
         self.__tap_handler = tap_toggle_handler
         self.__state = status
+        self.__event = event
         self.__place = place
         self.__on_image = PhotoImage(file=AssetsNames.on_file)
 
@@ -30,7 +31,7 @@ class InterButton(Label):
         self.__set_image(image)
 
         if self.__tap_handler is None: return
-        self.__tap_handler(event='LIGHTS', place=self.__place, action='SET', status=self.__state)
+        self.__tap_handler(event=self.__event, place=self.__place, action='SET', status=self.__state)
 
     def __set_image(self, image):
         self.configure(image=image)

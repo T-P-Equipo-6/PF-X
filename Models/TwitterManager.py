@@ -56,17 +56,13 @@ class TwitterManager:
                 self.send_message(data['sender']['id'], 'Hi ' + data['sender']['name'])
 
             elif text == 'ACTIVATE ALARM':
-                if not self.alarm_status:
-                    self.alarm_status = True
-                self.send_message(data['sender']['id'], 'The alarm is activated.')
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='ALARM', action='SET', status=True)
 
             elif text == 'DEACTIVATE ALARM':
-                if self.alarm_status:
-                    self.alarm_status = False
-                self.send_message(data['sender']['id'], 'The alarm is deactivated.')
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='ALARM', action='SET', status=False)
 
             elif text == 'ALARM STATUS':
-                self.send_message(data['sender']['id'], 'Alarm status: ' + str(self.alarm_status))
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='ALARM', action='GET')
 
             elif text == 'OPEN DOOR':
                 if not self.door_status:

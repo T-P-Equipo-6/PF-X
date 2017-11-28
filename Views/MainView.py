@@ -16,13 +16,14 @@ class MainView(Tk):
         def size(cls):
             return '{}x{}'.format(cls.width, cls.height)
 
-    def __init__(self, rooms=None, tap_operator_handler=None):
+    def __init__(self, rooms=None, alarm_status=None, tap_operator_handler=None):
         super().__init__()
         self.title(self.Constants.title)
         self.geometry(self.Constants.size())
         self.minsize(width=self.Constants.width, height=self.Constants.height)
         self.configure(bg=self.Constants.normal_color)
         self.__rooms = rooms
+        self.__alarm_status = alarm_status
         self.__configure_grid()
         self.__tap_operator_handler = tap_operator_handler
         self.__configure_ui()
@@ -40,7 +41,7 @@ class MainView(Tk):
             self.grid_columnconfigure(3, minsize=InterButton.Constants.width, weight=True)
 
     def __configure_ui(self):
-        self.__interface = InterfaceView(self, self.__rooms, tap_operator_handler=self.__tap_operator_handler)
+        self.__interface = InterfaceView(self, self.__rooms, alarm_status=self.__alarm_status, tap_operator_handler=self.__tap_operator_handler)
 
         self.__title_image = PhotoImage(file=AssetsNames.title_file)
         self.__title_label = Label(image=self.__title_image)
@@ -55,5 +56,8 @@ class MainView(Tk):
 
     def update_temperature_value(self, text):
         self.__interface.update_temperature(text)
+
+    def update_alarm_status(self, status):
+        self.__interface.set_alarm_button(status)
 
 
