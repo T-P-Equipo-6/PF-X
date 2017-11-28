@@ -1,14 +1,17 @@
 class EventsManager:
     def __init__(self, lights_handler=None, serial_handler=None, twitter_handler=None, buttons_update=None,
-                 temperature_handler=None, voice_handler=None):
+                 temperature_handler=None, voice_handler=None, alarm_handler=None, alarm_button_update=None):
+
         self.__lights = lights_handler
         self.__serial = serial_handler
         self.__twitter = twitter_handler
         self.__buttons_update = buttons_update
         self.__temperature = temperature_handler
         self.__voice = voice_handler
+        self.__alarm = alarm_handler
+        self.__alarm_update = alarm_button_update
 
-    def analyze_event(self,caller=None, user=None, event=None, place=None, action=None, status=None):
+    def analyze_event(self, caller=None, user=None, event=None, place=None, action=None, status=None):
         if event == 'LIGHTS':
             self.__lights_event(caller=caller, user=user, place=place, action=action, status=status)
 
@@ -57,11 +60,45 @@ class EventsManager:
             if caller == 'VOICE':
                 self.__voice.say(message=response)
 
-
     def __alarm_event(self, caller=None, user=None, place=None, action=None, status=None):
 
-        if action == 'ACTIVATE':
-            self.__twitter.send_alarm_message(message='The alarm has been activated \n Taking security measures.')
+        if action == 'SET':
+            if status:
+                self.__serial('ALARMON')
+                self.__alarm.set_alarm(True)
+                #self.__twitter.send_alarm_message(message='The alarm has been activated \n Taking security measures.')
+                self.__voice.say('The alarm has been activated, taking security measures.')
+
+                if caller == 'TWITTER':
+                    self.__alarm_update(True)
+
+                if caller == 'VOICE':
+                    self.__alarm_update(True)
+
+            if not status:
+                self.__serial('ALARMOFF')
+                self.__alarm.set_alarm(False)
+                response = 'The alarm has been deactivated'
+
+                if caller == 'TWITTER':
+                    self.__alarm_update(False)
+                    self.__twitter.send_message(user_id=user, message=response)
+
+                if caller == 'VOICE':
+                    self.__alarm_update(False)
+                    self.__voice.say(message=response)
+
+        if action == 'GET':
+            response = self.__alarm.alarm_status()
+
+            if caller == 'TWITTER':
+                self.__twitter.send_message(user_id=user, message=response)
+
+            if caller == 'VOICE':
+                self.__voice.say(message=response)
+
+
+
 
 
 

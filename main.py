@@ -20,8 +20,8 @@ class MainApp():
         self.__alarm = AlarmManager(event_handler=self.event_handler)
         self.__temperature = TemperatureManager(event_handler=self.event_handler, update_handler=self.update_temperature)
         self.__voice = VoiceCommands(event_handler=self.event_handler, rooms=self.__lights.rooms)
-        #self.__twitter = TwitterManager(event_handler=self.event_handler, rooms=self.__lights.rooms)
-        self.__master = MainView(rooms=self.__lights.rooms, tap_operator_handler=self.event_handler)
+        self.__twitter = TwitterManager(event_handler=self.event_handler, rooms=self.__lights.rooms)
+        self.__master = MainView(rooms=self.__lights.rooms, alarm_status=self.__alarm.alarm_status, tap_operator_handler=self.event_handler)
         self.__master.protocol("WM_DELETE_WINDOW")
 
         self.__events = EventsManager(lights_handler=self.__lights,
@@ -29,9 +29,12 @@ class MainApp():
                                       twitter_handler=None,
                                       buttons_update=self.__master.update_lights_buttons,
                                       temperature_handler=self.__temperature,
-                                      voice_handler=self.__voice)
+                                      voice_handler=self.__voice,
+                                      alarm_handler=self.__alarm,
+                                      alarm_button_update=self.__master.update_alarm_status)
 
         self.__master.bind('<space>', self.__on_space_clicked)
+        self.__counter = 0
 
     def run(self):
         self.__update_data()
@@ -43,7 +46,10 @@ class MainApp():
         except UnicodeDecodeError:
             raw_data = 'Bad data'
         self.__data.analyze_data(raw_data)
-        #self.__twitter.run()
+        if self.__counter == 1000:
+            self.__twitter.run()
+            self.__counter = 0
+        self.__counter += 1
         self.__master.after(1, self.__update_data)
 
     def alarm_handler(self, ultrasonic_value_1):

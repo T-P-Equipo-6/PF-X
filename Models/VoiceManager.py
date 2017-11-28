@@ -9,7 +9,7 @@ class VoiceCommands:
         self.engine.setProperty('voice', 'com.apple.speech.synthesis.voice.samantha')
         self.r = sr.Recognizer()
 
-        self.key = "EVTZACMLV7L52IHUWKBBU4C65E7V727Y"
+        self.key = "xxxxxxxxxxx"
 
         self.__events = event_handler
         self.__rooms = rooms
@@ -63,13 +63,12 @@ class VoiceCommands:
     def run(self):
 
             audio = self.listen()
-            print('Processing...')
+            self.say('Processing...')
             data = self.recognize_audio(audio)
 
             if not data:
                 self.say("Sorry, I didn't understand you")
 
-            print(data['entities'])
             try:
                 action = data['entities']['action'][0]['value']
             except KeyError:
@@ -122,12 +121,10 @@ class VoiceCommands:
                     self.say("I was unable to fullfill the command.")
 
             else:
-                print(data)
                 self.say("Sorry, I didn't understand any command.")
 
     def listen(self):
         with sr.Microphone() as source:
-            print("Say something!")
             return self.r.listen(source)
 
     def say(self, message):
