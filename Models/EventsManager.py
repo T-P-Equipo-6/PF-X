@@ -1,4 +1,6 @@
 from twitter import error
+from Helpers.CustomEvents import Events, Actions
+from Helpers.CustomCallers import Callers
 
 
 class EventsManager:
@@ -18,21 +20,21 @@ class EventsManager:
         self.__door_update = door_button_update
 
     def analyze_event(self, caller=None, user=None, event=None, place=None, action=None, status=None):
-        if event == 'LIGHTS':
+        if event == Events.LIGHTS.value:
             self.__lights_event(caller=caller, user=user, place=place, action=action, status=status)
 
-        if event == 'TEMPERATURE':
+        if event == Events.TEMPERATURE.value:
             self.__temperature_event(caller=caller, user=user, place=place, action=action, status=status)
 
-        if event == 'ALARM':
+        if event == Events.ALARM.value:
             self.__alarm_event(caller=caller, user=user, place=place, action=action, status=status)
 
-        if event == 'DOOR':
+        if event == Events.DOOR.value:
             self.__door_event(caller=caller, user=user, action=action, status=status)
 
     def __door_event(self, caller=None, user=None, action=None, status=None):
 
-        if action == 'SET':
+        if action == Actions.SET.value:
             actual_door_status = self.__door.get_door_status()
             if actual_door_status and status:
                 return
@@ -50,24 +52,24 @@ class EventsManager:
                 self.__door.set_door_status(False)
 
             response = self.__door.get_door_response()
-            if caller == 'TWITTER':
+            if caller == Callers.TWITTER.value:
                 self.__twitter.send_message(user_id=user, message=response)
 
-            if caller == 'VOICE':
+            if caller == Callers.VOICE.value:
                 self.__voice.say(message=response)
 
-        if action == 'GET':
+        if action == Actions.GET.value:
             response = self.__door.get_door_response()
-            if caller == 'TWITTER':
+            if caller == Callers.TWITTER.value:
                 self.__twitter.send_message(user_id=user, message=response)
 
-            if caller == 'VOICE':
+            if caller == Callers.VOICE.value:
                 self.__voice.say(message=response)
 
     def __lights_event(self, caller=None, user=None, place=None, action=None, status=None):
         response = ''
 
-        if action == 'SET':
+        if action == Actions.SET.value:
             serial, response = self.__lights.set_lights(room=place, status=status)
             self.__serial(serial)
 
@@ -77,11 +79,11 @@ class EventsManager:
         if action == 'ROOMS_STATUS':
             response = self.__lights.rooms_status()
 
-        if caller == 'TWITTER':
+        if caller == Callers.TWITTER.value:
             self.__buttons_update()
             self.__twitter.send_message(user_id=user, message=response)
 
-        if caller == 'VOICE':
+        if caller == Callers.VOICE.value:
             self.__buttons_update()
             self.__voice.say(message=response)
 
@@ -96,18 +98,18 @@ class EventsManager:
                 self.__serial('FANHOUSEOFF')
                 self.__voice.say('The fans were deactivated.')
 
-        if action == 'GET':
+        if action == Actions.GET.value:
             response = self.__temperature.get_temperature()
 
-            if caller == 'TWITTER':
+            if caller == Callers.TWITTER.value:
                 self.__twitter.send_message(user_id=user, message=response)
 
-            if caller == 'VOICE':
+            if caller == Callers.VOICE.value:
                 self.__voice.say(message=response)
 
     def __alarm_event(self, caller=None, user=None, place=None, action=None, status=None):
 
-        if action == 'SET':
+        if action == Actions.SET.value:
             if status:
                 self.__serial('ALARMON')
                 self.__alarm.set_alarm(True)
@@ -121,10 +123,10 @@ class EventsManager:
                 except error.TwitterError:
                     self.__voice.say('Unable to send Twitter message')
 
-                if caller == 'TWITTER':
+                if caller == Callers.TWITTER.value:
                     self.__alarm_update(True)
 
-                if caller == 'VOICE':
+                if caller == Callers.VOICE.value:
                     self.__alarm_update(True)
 
             if not status:
@@ -132,21 +134,21 @@ class EventsManager:
                 self.__alarm.set_alarm(False)
                 response = 'The alarm has been deactivated'
 
-                if caller == 'TWITTER':
+                if caller == Callers.TWITTER.value:
                     self.__alarm_update(False)
                     self.__twitter.send_message(user_id=user, message=response)
 
-                if caller == 'VOICE':
+                if caller == Callers.VOICE.value:
                     self.__alarm_update(False)
                     self.__voice.say(message=response)
 
-        if action == 'GET':
+        if action == Actions.GET.value:
             response = self.__alarm.alarm_status()
 
-            if caller == 'TWITTER':
+            if caller == Callers.TWITTER.value:
                 self.__twitter.send_message(user_id=user, message=response)
 
-            if caller == 'VOICE':
+            if caller == Callers.VOICE.value:
                 self.__voice.say(message=response)
 
 

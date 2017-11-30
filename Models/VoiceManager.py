@@ -103,10 +103,10 @@ class VoiceCommands:
                     self.__events(caller='VOICE', event='ALARM', action='SET', status=False)
 
                 elif action == 'open' and object == 'door':
-                    self.__events(caller='VOICE', event='DOOR', action='GET', status=True)
+                    self.__events(caller='VOICE', event='DOOR', action='SET', status=True)
 
                 elif action == 'close' and object == 'door':
-                    self.__events(caller='VOICE', event='DOOR', action='GET', status=False)
+                    self.__events(caller='VOICE', event='DOOR', action='SET', status=False)
 
                 elif action == 'status' and object in self.objects:
                     self.validate_status(object, place)
