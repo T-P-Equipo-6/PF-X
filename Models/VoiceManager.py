@@ -65,7 +65,11 @@ class VoiceCommands:
 
             audio = self.listen()
             self.say('Processing...')
-            data = self.recognize_audio(audio)
+            try:
+                data = self.recognize_audio(audio)
+            except TypeError:
+                data = None
+            print(data)
 
             if not data:
                 self.say("Sorry, I didn't understand you")
@@ -73,44 +77,36 @@ class VoiceCommands:
             try:
                 action = data['entities']['action'][0]['value']
             except KeyError:
-                action = None
+                action = 'None'
 
             try:
                 object = data['entities']['object'][0]['value']
             except KeyError:
-                object = None
+                object = 'None'
 
             try:
                 status = data['entities']['status'][0]['value']
             except KeyError:
-                status = None
+                status = 'None'
 
             try:
                 place = data['entities']['place'][0]['value']
             except KeyError:
-                place = None
+                place = 'None'
 
             if action in self.actions:
 
                 if action == 'activate' and object == 'alarm':
-                    if not self.alarm_status:
-                        self.alarm_status = True
-                    self.say(self.objects[object]['phrase'][str(self.alarm_status)])
+                    self.__events(caller='VOICE', event='ALARM', action='SET', status=True)
 
                 elif action == 'deactivate' and object == 'alarm':
-                    if self.alarm_status:
-                        self.alarm_status = False
-                        self.say(self.objects[object]['phrase'][str(self.alarm_status)])
+                    self.__events(caller='VOICE', event='ALARM', action='SET', status=False)
 
                 elif action == 'open' and object == 'door':
-                    if not self.door_status:
-                        self.door_status = True
-                    self.say(self.objects[object]['phrase'][str(self.door_status)])
+                    self.__events(caller='VOICE', event='DOOR', action='GET', status=True)
 
                 elif action == 'close' and object == 'door':
-                    if self.door_status:
-                        self.door_status = False
-                        self.say(self.objects[object]['phrase'][str(self.door_status)])
+                    self.__events(caller='VOICE', event='DOOR', action='GET', status=False)
 
                 elif action == 'status' and object in self.objects:
                     self.validate_status(object, place)
@@ -163,9 +159,8 @@ class VoiceCommands:
         if object == 'temperature':
             self.__events(caller='VOICE', event='TEMPERATURE', action='GET')
 
-        if object == 'alarm' or object == 'door':
-            status = str(self.objects[object]['status'])
-            self.say(self.objects[object]['phrase'][status])
+        if object == 'door':
+            self.__events(caller='VOICE', event='DOOR', action='GET')
 
     def validate_turn(self, status, place):
         if status == 'on':

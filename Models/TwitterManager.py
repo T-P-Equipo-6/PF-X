@@ -17,10 +17,6 @@ class TwitterManager:
         except twitter.error.TwitterError:
             self.__message_id = None
 
-        self.alarm_status = False
-
-        self.door_status = False
-
         self.__temperature = None
 
         self.__events = event_handler
@@ -65,17 +61,13 @@ class TwitterManager:
                 self.__events(caller='TWITTER', user=(data['sender']['id']), event='ALARM', action='GET')
 
             elif text == 'OPEN DOOR':
-                if not self.door_status:
-                    self.door_status = True
-                self.send_message(data['sender']['id'], 'The door is open.')
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='DOOR', action='SET', status=True)
 
             elif text == 'CLOSE DOOR':
-                if self.door_status:
-                    self.door_status = False
-                self.send_message(data['sender']['id'], 'The door is close.')
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='DOOR', action='SET', status=False)
 
             elif text == 'DOOR STATUS':
-                self.send_message(data['sender']['id'], 'Door status: ' + str(self.door_status))
+                self.__events(caller='TWITTER', user=(data['sender']['id']), event='DOOR', action='GET')
 
             elif text == 'TEMPERATURE':
                 self.__events(caller='TWITTER', user=(data['sender']['id']), event='TEMPERATURE', action='GET')

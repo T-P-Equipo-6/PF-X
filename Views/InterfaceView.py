@@ -11,7 +11,7 @@ class InterfaceView:
         row_height = 100
         center = W + E + N + S
 
-    def __init__(self, master, rooms=None, alarm_status=None, tap_operator_handler=None):
+    def __init__(self, master, rooms=None, alarm_status=None, door_status=None, tap_operator_handler=None):
         counter = 0
         self.__master = master
         self.__tap_operator = tap_operator_handler
@@ -21,11 +21,7 @@ class InterfaceView:
             counter += 1
 
         self.set_alarm_button(alarm_status)
-
-        door_button = InterButton(master, tap_operator_handler, None, False)
-        door_button.position(2, 3)
-        door_label = InterLabel('DOOR')
-        door_label.position(2, 2)
+        self.set_door_button(door_status)
 
         temperature_label = InterLabel('TEMPERATURE')
         temperature_label.position(3, 2)
@@ -41,4 +37,8 @@ class InterfaceView:
         alarm_label = InterLabel('ALARM')
         alarm_label.position(1, 2)
 
-
+    def set_door_button(self, status):
+        door_button = InterButton(self.__master, tap_toggle_handler=self.__tap_operator , status=status, event='DOOR')
+        door_button.position(2, 3)
+        door_label = InterLabel('DOOR')
+        door_label.position(2, 2)
