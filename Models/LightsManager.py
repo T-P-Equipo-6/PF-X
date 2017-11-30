@@ -34,3 +34,7 @@ class LightsManager:
         for room in self.rooms:
             message = message + '\n' + room + self.phrase + self.status[str(self.rooms[room])]
         return message
+
+    def turn_off_lights(self):
+        for room in self.rooms:
+            self.rooms[room] = False
