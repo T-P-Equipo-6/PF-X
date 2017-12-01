@@ -23,22 +23,26 @@ void setup() {
  
 void loop() {
   if (trigger == false){
-    return
+    digitalWrite(alarmLeds, LOW);
+    noTone(buzzerPin);
+    return;
   }
-  else{
-    tone(buzzerPin, note, duration);
-    if(counter % 2 == 0){
-      digitalWrite(alarmLeds, HIGH);
-      delay(duration);
-    }else{
-      digitalWrite(alarmLeds, LOW);
-      delay(duration);
-    }
-      noTone(buzzerPin);
-      delay(50);
+  
+  tone(buzzerPin, note, duration);
+  
+  if(counter % 2 == 0){
+    digitalWrite(alarmLeds, HIGH);
+    delay(duration);
+    digitalWrite(alarmLeds, LOW);
+  }else{
+    digitalWrite(alarmLeds, LOW);
+    delay(duration);
+  }
+  
+  noTone(buzzerPin);
+  delay(50);
 
-      counter++;
-  }
+  counter++;
 }
 
 void receiveEvent(int state) {
