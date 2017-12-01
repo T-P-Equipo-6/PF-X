@@ -17,7 +17,6 @@ class DataManager():
         try:
             data = json.loads(str(clean_data))
         except JSONDecodeError:
-            print('bad data')
             return
 
         try:

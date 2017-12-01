@@ -13,7 +13,8 @@ from serial import Serial
 
 class MainApp():
     def __init__(self):
-        self.__arduino = Serial('/dev/tty.usbmodem1451', 9600)
+        port = '/dev/tty.usbmodem1451'
+        self.__arduino = Serial(port, 9600)
 
         self.__data = DataManager(alarm_handler=self.alarm_handler, temperature_handler=self.temperature_handler)
 
@@ -22,13 +23,13 @@ class MainApp():
         self.__alarm = AlarmManager(event_handler=self.event_handler)
         self.__temperature = TemperatureManager(event_handler=self.event_handler, update_handler=self.update_temperature)
         self.__voice = VoiceCommands(event_handler=self.event_handler, rooms=self.__lights.rooms)
-        #self.__twitter = TwitterManager(event_handler=self.event_handler, rooms=self.__lights.rooms)
+        self.__twitter = TwitterManager(event_handler=self.event_handler, rooms=self.__lights.rooms)
         self.__master = MainView(rooms=self.__lights.rooms, door=self.__door.door_status, alarm_status=self.__alarm.alarm_status, tap_operator_handler=self.event_handler)
         self.__master.protocol("WM_DELETE_WINDOW")
 
         self.__events = EventsManager(lights_handler=self.__lights,
                                       serial_handler=self.house_handler,
-                                      twitter_handler=None,
+                                      twitter_handler=self.__twitter,
                                       buttons_update=self.__master.update_lights_buttons,
                                       temperature_handler=self.__temperature,
                                       voice_handler=self.__voice,
@@ -50,8 +51,8 @@ class MainApp():
         except UnicodeDecodeError:
             raw_data = 'Bad data'
         self.__data.analyze_data(raw_data)
-        if self.__counter == 1000:
-            #self.__twitter.run()
+        if self.__counter == 500:
+            self.__twitter.run()
             self.__counter = 0
         self.__counter += 1
         self.__master.after(1, self.__update_data)

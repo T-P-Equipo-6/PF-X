@@ -1,4 +1,6 @@
 from Models.VoiceAuth import VoiceAuth
+from Helpers.CustomEvents import Events, Actions
+from Helpers.CustomCallers import Callers
 import speech_recognition as sr
 import pyttsx3
 
@@ -15,48 +17,13 @@ class VoiceCommands:
         self.__events = event_handler
         self.__rooms = rooms
 
-        self.bedroom_light = False
-        self.studio_light = False
-        self.kitchen_light = False
-        self.bathroom_light = False
-
-        self.alarm_status = True
-
-        self.door_status = False
-
-        self.temperature = 20
-
         self.actions = ['turn', 'activate', 'deactivate', 'status', 'open', 'close']
 
         self.objects = {
-            'lights': {
-                'places': {
-                    'bedroom': self.bedroom_light,
-                    'studio': self.studio_light,
-                    'kitchen': self.kitchen_light,
-                    'bathroom': self.bathroom_light
-                },
-                'phrase': {
-                    'True': ' lights are on',
-                    'False': ' lights are off'
-                }
-
-            },
-            'alarm': {
-                'status': self.alarm_status,
-                'phrase': {
-                    'True': 'The alarm is activated',
-                    'False': 'The alarm is deactivated'
-                }
-            },
-            'door': {
-                'status': self.door_status,
-                'phrase': {
-                    'True': 'The door is open.',
-                    'False': 'The door is closed.'
-                }
-            },
-            'temperature': 'holi'
+            'lights',
+            'alarm',
+            'door',
+            'temperature'
         }
 
         self.status = ['on', 'off']
@@ -69,7 +36,6 @@ class VoiceCommands:
                 data = self.recognize_audio(audio)
             except TypeError:
                 data = None
-            print(data)
 
             if not data:
                 self.say("Sorry, I didn't understand you")
@@ -97,16 +63,16 @@ class VoiceCommands:
             if action in self.actions:
 
                 if action == 'activate' and object == 'alarm':
-                    self.__events(caller='VOICE', event='ALARM', action='SET', status=True)
+                    self.__events(caller=Callers.VOICE.value, event=Events.ALARM.value, action=Actions.SET.value, status=True)
 
                 elif action == 'deactivate' and object == 'alarm':
-                    self.__events(caller='VOICE', event='ALARM', action='SET', status=False)
+                    self.__events(caller=Callers.VOICE.value, event=Events.ALARM.value, action=Actions.SET.value, status=False)
 
                 elif action == 'open' and object == 'door':
-                    self.__events(caller='VOICE', event='DOOR', action='SET', status=True)
+                    self.__events(caller=Callers.VOICE.value, event=Events.DOOR.value, action=Actions.SET.value, status=True)
 
                 elif action == 'close' and object == 'door':
-                    self.__events(caller='VOICE', event='DOOR', action='SET', status=False)
+                    self.__events(caller=Callers.VOICE.value, event=Events.DOOR.value, action=Actions.SET.value, status=False)
 
                 elif action == 'status' and object in self.objects:
                     self.validate_status(object, place)
@@ -141,7 +107,7 @@ class VoiceCommands:
     def validate_status(self, object, place):
         if object == 'lights':
             if place is not None:
-                self.__events(caller='VOICE', event='LIGHTS', place=place.upper(), action='ROOM_STATUS')
+                self.__events(caller=Callers.VOICE.value, event=Events.LIGHTS.value, place=place.upper(), action='ROOM_STATUS')
             else:
                 self.say('From which room you want to know?')
                 audio = self.listen()
@@ -152,21 +118,21 @@ class VoiceCommands:
                 except KeyError:
                     room = None
                 if room in self.__rooms:
-                    self.__events(caller='VOICE', event='LIGHTS', place=room.upper(), action='ROOM_STATUS')
+                    self.__events(caller=Callers.VOICE.value, event=Events.LIGHTS.value, place=room.upper(), action='ROOM_STATUS')
                 else:
                     self.say("Sorry, I didn't understand that room")
 
         if object == 'temperature':
-            self.__events(caller='VOICE', event='TEMPERATURE', action='GET')
+            self.__events(caller=Callers.VOICE.value, event=Events.TEMPERATURE.value, action=Actions.GET.value)
 
         if object == 'door':
-            self.__events(caller='VOICE', event='DOOR', action='GET')
+            self.__events(caller=Callers.VOICE.value, event=Events.DOOR.value, action=Actions.GET.value)
 
     def validate_turn(self, status, place):
         if status == 'on':
-            self.__events(caller='VOICE', event='LIGHTS', place=place, action='SET', status=True)
+            self.__events(caller=Callers.VOICE.value, event=Events.LIGHTS.value, place=place, action=Actions.SET.value, status=True)
         if status == 'off':
-            self.__events(caller='VOICE', event='LIGHTS', place=place, action='SET', status=False)
+            self.__events(caller=Callers.VOICE.value, event=Events.LIGHTS.value, place=place, action=Actions.SET.value, status=False)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,6 @@
+from Helpers.CustomEvents import Events
+
+
 class TemperatureManager:
     def __init__(self, event_handler=None, update_handler=None):
         self.temperature = None
@@ -30,11 +33,11 @@ class TemperatureManager:
         if self.temperature:
             if self.temperature >= self.__max_temperature and not self.__fan_status:
                 self.__fan_status = True
-                self.__event(caller=None, user=None, event='TEMPERATURE', place='HOUSE', action='FAN', status=self.__fan_status)
+                self.__event(caller=None, user=None, event=Events.TEMPERATURE.value, place='HOUSE', action='FAN', status=self.__fan_status)
 
             if self.temperature < self.__max_temperature and self.__fan_status:
                 self.__fan_status = False
-                self.__event(caller=None, user=None, event='TEMPERATURE', place='HOUSE', action='FAN', status=self.__fan_status)
+                self.__event(caller=None, user=None, event=Events.TEMPERATURE.value, place='HOUSE', action='FAN', status=self.__fan_status)
 
         return self.temperature
 

@@ -1,3 +1,7 @@
+from Helpers.CustomEvents import Events, Actions
+from Helpers.CustomCallers import Callers
+
+
 class AlarmManager():
     def __init__(self, event_handler=None):
         self.__perimeter = None
@@ -38,7 +42,7 @@ class AlarmManager():
                 return
 
             if not (self.__perimeter * self.__lowest_diff_percentage <= self.__actual_perimeter <= self.__perimeter * self.__highest_diff_percentage) and not self.alarm_status:
-                self.__event(caller='VOICE', event='ALARM', action='SET', status=True)
+                self.__event(caller=Callers.VOICE.value, event=Events.ALARM.value, action=Actions.SET.value, status=True)
 
     def __turn_to_distance(self, data):
         try:

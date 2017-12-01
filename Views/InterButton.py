@@ -1,5 +1,6 @@
 from tkinter import W, E, N, S, Label, PhotoImage
 from Helpers.CustomTypes import AssetsNames
+from Helpers.CustomEvents import Actions
 
 
 class InterButton(Label):
@@ -31,7 +32,7 @@ class InterButton(Label):
         self.__set_image(image)
 
         if self.__tap_handler is None: return
-        self.__tap_handler(event=self.__event, place=self.__place, action='SET', status=self.__state)
+        self.__tap_handler(event=self.__event, place=self.__place, action=Actions.SET.value, status=self.__state)
 
     def __set_image(self, image):
         self.configure(image=image)

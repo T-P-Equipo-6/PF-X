@@ -7,6 +7,7 @@ class Events(Enum):
     DOOR = 'DOOR'
     TEMPERATURE = 'TEMPERATURE'
 
+
 class Actions(Enum):
     SET = 'SET'
     GET = 'GET'
